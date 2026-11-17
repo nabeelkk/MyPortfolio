@@ -1,0 +1,396 @@
+@import "tailwindcss";
+
+/* ───────────── Midnight Chrome — design tokens ───────────── */
+:root {
+  --bg: #050506;
+  --surface: #0d0e11;
+  --surface-2: #121318;
+  --line: rgba(255, 255, 255, 0.07);
+  --line-strong: rgba(255, 255, 255, 0.14);
+  --fg: #f2f3f5;
+  --muted: #8b8f98;
+  --cobalt: #3d6bff;
+  --cobalt-soft: #7d9bff;
+  --live: #34d399;
+  --dev: #f5b74a;
+  --chrome: linear-gradient(100deg, #c9d3ff 0%, #ffffff 45%, #9fb4ff 100%);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --gutter: clamp(1rem, 4vw, 3rem);
+  --maxw: 1320px;
+  color-scheme: dark;
+}
+
+@theme {
+  --color-bg: #050506;
+  --color-surface: #0d0e11;
+  --color-surface-2: #121318;
+  --color-line: rgba(255, 255, 255, 0.07);
+  --color-line-strong: rgba(255, 255, 255, 0.14);
+  --color-fg: #f2f3f5;
+  --color-muted: #8b8f98;
+  --color-cobalt: #3d6bff;
+  --color-cobalt-soft: #7d9bff;
+  --color-live: #34d399;
+  --color-dev: #f5b74a;
+  --font-display: var(--font-clash), "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), "JetBrains Mono", ui-monospace, monospace;
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+  --text-display-xl: clamp(3rem, 10.5vw, 10.5rem);
+  --text-display-lg: clamp(2.5rem, 7vw, 6.5rem);
+  --text-display-md: clamp(2rem, 4.6vw, 4.25rem);
+  --text-display-sm: clamp(1.5rem, 2.6vw, 2.25rem);
+}
+
+/* ───────────── Base ───────────── */
+html {
+  background: var(--bg);
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--cobalt);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--cobalt-soft);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ───────────── Utilities ───────────── */
+@utility container-x {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+@utility chrome-text {
+  background: var(--chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility label-mono {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+@utility glass {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.02));
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid var(--line);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 20px 60px -30px rgba(0, 0, 0, 0.8);
+}
+
+@utility hairline {
+  border: 1px solid var(--line);
+}
+
+@utility text-balance {
+  text-wrap: balance;
+}
+
+/* Underline that draws in on hover */
+.link-draw {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+  transition: background-size 0.5s var(--ease);
+}
+.link-draw:hover,
+.link-draw:focus-visible {
+  background-size: 100% 1px;
+  background-position: 0% 100%;
+}
+
+/* Skip link */
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 200;
+  transform: translateY(-200%);
+  background: var(--cobalt);
+  color: #fff;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  font-weight: 600;
+  transition: transform 0.3s var(--ease);
+}
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* Film grain: a tiny pre-rendered noise tile, shifted with compositor-only transforms. */
+.grain {
+  position: fixed;
+  inset: -10%;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.045;
+  background-size: 128px 128px;
+  will-change: transform;
+  animation: grain 1s steps(5) infinite;
+}
+@keyframes grain {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  20% {
+    transform: translate3d(-3%, 2%, 0);
+  }
+  40% {
+    transform: translate3d(2%, -3%, 0);
+  }
+  60% {
+    transform: translate3d(-2%, -1%, 0);
+  }
+  80% {
+    transform: translate3d(3%, 3%, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+@media (max-width: 767px) {
+  .grain {
+    animation: none;
+  }
+}
+
+/* Pulsing status dot */
+.pulse-dot {
+  position: relative;
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--live);
+}
+.pulse-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: inherit;
+  animation: pulse 2s var(--ease) infinite;
+}
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+/* Grid pattern used for generated covers and backgrounds */
+.grid-pattern {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Marquee */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Scroll hint line */
+.scroll-line {
+  position: relative;
+  width: 1px;
+  height: 3rem;
+  overflow: hidden;
+  background: var(--line-strong);
+}
+.scroll-line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent, var(--fg));
+  animation: scroll-line 2s var(--ease) infinite;
+}
+@keyframes scroll-line {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+/* Spotlight tiles (cursor-follow radial glow; --mx/--my set from JS) */
+.spotlight {
+  position: relative;
+  isolation: isolate;
+}
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(61, 107, 255, 0.16),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+}
+.spotlight:hover::before {
+  opacity: 1;
+}
+
+/* ───────────── Hero ───────────── */
+.hero-track {
+  position: relative;
+  height: 400vh;
+}
+.hero-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+}
+.hero-chapter {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-inline: var(--gutter);
+  pointer-events: none;
+}
+.hero-chapter[data-chapter="1"] {
+  justify-content: flex-end;
+  padding-bottom: clamp(6rem, 16vh, 11rem);
+}
+.hero-chapter a,
+.hero-chapter button {
+  pointer-events: auto;
+}
+/* Before JS: only chapter 1 is visible. */
+.hero-chapter:not([data-chapter="1"]) {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Reduced motion / Save-Data: static stacked hero, no sequence */
+html[data-motion="reduced"] .hero-track {
+  height: auto;
+}
+html[data-motion="reduced"] .hero-stage {
+  position: relative;
+  height: auto;
+  min-height: 100svh;
+}
+html[data-motion="reduced"] .hero-chapters {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  padding-block: 28vh 8rem;
+}
+html[data-motion="reduced"] .hero-chapter {
+  position: relative;
+  inset: auto;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  padding-bottom: 0;
+}
+html[data-motion="reduced"] .hero-chapter * {
+  opacity: 1 !important;
+  transform: none !important;
+}
+html[data-motion="reduced"] .hero-motion-only {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+  .grain {
+    animation: none;
+  }
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* Custom cursor hides the native one on fine pointers */
+html.has-cursor,
+html.has-cursor * {
+  cursor: none !important;
+}
+
+/* Contact outro floor: a dim glass-circuit grid receding to the horizon */
+.contact-floor {
+  background-image:
+    linear-gradient(rgba(125, 155, 255, 0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(125, 155, 255, 0.16) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: linear-gradient(to top, #000 10%, transparent 75%);
+  animation: floor 18s linear infinite;
+}
+@keyframes floor {
+  to {
+    background-position: 0 64px;
+  }
+}
