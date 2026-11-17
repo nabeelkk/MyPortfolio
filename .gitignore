@@ -8,3 +8,5 @@ media/source
 *.tsbuildinfo
 next-env.d.ts
 Nabeel_CV.pdf
+.vercel
+.env*
